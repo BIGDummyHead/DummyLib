@@ -8,14 +8,19 @@ I plan on working on Constructor and Type adding in the future
 To open an Assembly Writer it is pretty simple
 There are around 6 AssemblyWriter CTORs but I will just use the longest one so you can get an understanding
 
-    //                     Should the assemblywriter throw its internal errors?  Should the Writer backup the targetfile?
-    //AssemblyWriter(string targetFile, string output, bool throwInternalErrors, bool backUpFile)
-    AssemblyWriter writer = new AssemblyWriter("Target.dll", "dllToWriteTo.dll", true, true);
+```csharp
+
+//Should the assemblywriter throw its internal errors?  Should the Writer backup the targetfile?
+//AssemblyWriter(string targetFile, string output, bool throwInternalErrors, bool backUpFile)
+AssemblyWriter writer = new AssemblyWriter("Target.dll", "dllToWriteTo.dll", true, true);
+
+```
     
 __________________________________
 
 ## Creating a Method
-    
+
+```csharp
     //implement the IMethodCreator Interface
     public class MethodsToAdd : IMethodCreator
     {
@@ -65,13 +70,15 @@ __________________________________
 	}
                 
     }
-    
+ ```
     
 __________________________________
 
 ## Creating A Field
     
 Creating a field is pretty simple so let's do it
+
+```csharp
 
     //open a writer 
     AssemblyWriter writer = new AssemblyWriter("target.dll");
@@ -87,6 +94,7 @@ Creating a field is pretty simple so let's do it
     
     //save to the target
     writer.Save();
+```    
     
 __________________________________
     
@@ -94,6 +102,7 @@ __________________________________
  
 Creating a property is a little more difficult so let me show you how to do it
 
+```csharp
       //First make a class that inherits the Property<T>
       
       public class MyProp : Property<string>
@@ -135,11 +144,12 @@ Creating a property is a little more difficult so let me show you how to do it
           //generates public T NameHere { get; set; }
           */
       }
+```
     
     
 __________________________________
 
-
+```csharp
       //now let's write the property
       
       //open the writer
@@ -156,6 +166,7 @@ __________________________________
       
       //write to the target
       writer.Save();
+ ```
     
 __________________________________
 
@@ -163,6 +174,7 @@ __________________________________
 
 I will now show you how to add instructions to a method
 
+```csharp
             //Open the writer
             AssemblyWriter writer = new AssemblyWriter("Target.dll");
 
@@ -186,11 +198,14 @@ I will now show you how to add instructions to a method
             
             //the writer contains another method for adding and removing instructions, 
             //this allows you to add multiple instructions or even remove multiple instructions at the same time
+```
 __________________________________        
 
 ## Creating A Type
 
 This is pretty simple and I made it this way to avoid confusion
+
+```csharp
 
             //open a writer
             AssemblyWriter writer = new AssemblyWriter("Target.dll");
@@ -209,6 +224,7 @@ This is pretty simple and I made it this way to avoid confusion
             TypeDef tdef = writer.CreateType(userT);
             
             writer.Save();
+```	    
     
 __________________________________        
 
@@ -216,6 +232,7 @@ __________________________________
 
 This is even simpiler than creating your own Type
 
+```csharp
             //open a writer
             AssemblyWriter writer = new AssemblyWriter("Target.dll");
             
@@ -231,9 +248,12 @@ This is even simpiler than creating your own Type
             
             //save to file
             writer.Save();
+```	    
 __________________________________        
 
 ## Adding Constructors To A TargetType
+
+```csharp
 
             //Create a class with the interface IHasConstructors
             
@@ -263,64 +283,15 @@ __________________________________
             
             //save to dll
             writer.Save();
+```	    
             
 __________________________________     
 
             
-## Changes
+## Future
 
-AssemblyWriter now Inherits IDisposable --> using(AssemblyWriter writer = new AssemblyWriter("Target.dll")) -> Disposes
-AssemblyWriter also allows you to save and then dispose at the same time! -> writer.SaveAndDispose();
+The future of this project is not really anything of note. I wanted to make this repo more open source and simple to read.
 
-AssemblyWriter also includes two new static methods -> AssemblyWriter.GetFullName(Type t); AssemblyWriter.GetFullName(TypeDef tDef);
+Before it was really ugly looking and such.
 
-+Added Types
-
-+UserType (Class)
-+ExistingType (Class)
-+IHasConstructors (Interface)
-+IMethodCreator (Interface)
-
--Removed Types
-
--IMultipleMethodCreator (Interface)
--MethodCreator (Class)
-
-+Added To AssemblyWriter
-
-+ CanSave(ref string)
-+ CanWrite => CanSave(ref string) => Hidden string
-+ DisposeSave => Save On Dispose
-
-
-
-Removed adding Single methods, seemed like a waste.
-
-+Extensions
-
-+ ToTarget(this ITypeDefOrRef tRef) => TargetType
-+ ToTarget(this this MethodDef method) => TargetMethod
-+ GetMethod(this IEnumerable<MethodDef> methods, string name, params Type[] args) => MethodDef
-+ GetMethod(this IEnumerable<MethodDef> methods, string name, TypeSig[] args) => MethodDef
-	
-+Provided Overrides for ToString on TargetType and TargetMethod
-
-+ Added a new method to AssemblyWriter
-+ Find(string typeName)
-+ (static) IsReflectionName(string name) => bool
-+ (static) IsNestedName(string name) => bool => opposes IsReflectionName(string)
-
-+AssemblyWriter Implements ICloneable => AssemblyWriter.Clone() => Object => AssemblyWriter myNewWriter = currentWriter.Clone() as AssemblyWriter => Cloned
-
-__________________________________     
-
-public sealed class EmptyProperty<T> : Property<T> -> Provides an empty property
-Property<T> contains a new method named "CreateEmptyProperty" -> Property<string>.CreateEmptyProperty(AssemblyWriter writer, TargetType target, string propName, MethodAttributes attrs); -> Returns and Creates A PropertyDef inside of the TargetType
-
-__________________________________   
-
-## Coming Soon 
-
-Attribute Support
-
-More To Come!
+If you would like to contribute to this project please contact me at my [email](mailto:codestopping22@gmail.com)
